@@ -2,29 +2,48 @@ module Juicy
 
   class Note
   
-    attr_reader :name, :pitch
+	  @@default_octave = 4
+    attr_reader :name, :pitch, :octave
     
-    def initialize(name)
+    def initialize(name = "A", octave_change = 0)
       @name = parse_note_name(name)
       @pitch = Pitch.new(@name)
+	    @octave = @@default_octave + octave_change
     end
     
+    def to_s
+      name = @name[0]
+      name += "#" if @name=~/sharp/
+      name += "b" if @name=~/flat/
+      "#{name}#{@octave}"
+    end
+	
     def inspect
       "#{@name}"
     end
     
-    def play(options = {duration: 200})
+    def play(options = {duration: 200, octave: (@octave-@@default_octave)})
       @pitch.play(options)
     end
     
     def +(interval)
-      Note.new(PITCHES.key((PITCHES[@name]+interval) % 12))
+	  step = PITCHES[@name]+interval
+	  octave_change = step/12 #mathy stuff to figure out how many octaves were traversed (cant assume just one was
+      name = PITCHES.key((PITCHES[@name]+interval) % 12)
+      Note.new(name, @octave-@@default_octave + octave_change)
     end
     
     def -(interval)
-      puts self
-      puts PITCHES.key((PITCHES[@name]-interval) % 12)
       Note.new(PITCHES.key((PITCHES[@name]-interval) % 12))
+    end
+    
+    def <=>(other_note)
+      #return -1 if self is lower
+      return -1 if self.pitch < other_note.pitch
+      #return 0 if they're the same
+      return 0 if self.pitch == other_note.pitch
+      #return 1 if other note is lower
+      return 1 if self.pitch > other_note.pitch
     end
     
     private

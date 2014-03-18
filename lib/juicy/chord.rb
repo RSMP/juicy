@@ -15,7 +15,12 @@ module Juicy
       @quality = options[:quality] || :major
       @inversion = options[:inversion] || 0
       @context = options[:context] || :none
+	  @type = :triad
     end
+	
+	def to_s
+	  "chord type: #{@type}, quality: #{@quality}, root: #{@root}, inversion: #{@inversion}"
+	end
     
     def inspect
       "#{@root.name} #{@quality} Chord, inversion: #{@inversion}"
