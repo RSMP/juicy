@@ -40,7 +40,11 @@ module Juicy
     end
     
     def <=>(other_note)
-      self.pitch <=> other_note.pitch
+      if (self.octave <=> other_note.octave) == 0
+        self.pitch <=> other_note.pitch
+      else
+        self.octave <=> other_note.octave
+      end
     end
     
     private
