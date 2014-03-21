@@ -44,6 +44,10 @@ module Juicy
       end
       
     end
+	
+	def to_s
+	  "#{@frequency}"
+	end
     
     def tune
       if out_of_tune
@@ -66,8 +70,20 @@ module Juicy
       Win32::Sound.play_freq(options[:note].pitch.frequency, options[:note].duration)
     end
     
-    def play(options = {duration: 200})
-      Win32::Sound.play_freq(@frequency, options[:duration])
+    def play(options = {duration: 200, octave: 0})
+      Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration])
+    end
+    
+    def <(other_pitch)
+     self.frequency < other_pitch.frequency
+    end
+    
+    def >(other_pitch)
+     self.frequency > other_pitch.frequency    
+    end
+    
+    def ==(other_pitch)
+     self.frequency == other_pitch.frequency    
     end
     
     private
