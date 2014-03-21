@@ -26,6 +26,7 @@ module Juicy
 
   class Pitch
   
+    include Comparable
     @@temperament = :equal
     @@pitch_standard = 440.0
     
@@ -45,9 +46,9 @@ module Juicy
       
     end
 	
-	def to_s
-	  "#{@frequency}"
-	end
+    def to_s
+      "#{@frequency}"
+    end
     
     def tune
       if out_of_tune
@@ -74,16 +75,8 @@ module Juicy
       Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration])
     end
     
-    def <(other_pitch)
-     self.frequency < other_pitch.frequency
-    end
-    
-    def >(other_pitch)
-     self.frequency > other_pitch.frequency    
-    end
-    
-    def ==(other_pitch)
-     self.frequency == other_pitch.frequency    
+    def <=>(other_pitch)
+      self.frequency <=> other_pitch.frequency
     end
     
     private

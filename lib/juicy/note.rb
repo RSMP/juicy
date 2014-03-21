@@ -2,6 +2,8 @@ module Juicy
 
   class Note
   
+    include Comparable
+  
 	  @@default_octave = 4
     attr_reader :name, :pitch, :octave
     
@@ -38,12 +40,7 @@ module Juicy
     end
     
     def <=>(other_note)
-      #return -1 if self is lower
-      return -1 if self.pitch < other_note.pitch
-      #return 0 if they're the same
-      return 0 if self.pitch == other_note.pitch
-      #return 1 if other note is lower
-      return 1 if self.pitch > other_note.pitch
+      self.pitch <=> other_note.pitch
     end
     
     private
