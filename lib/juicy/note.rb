@@ -5,11 +5,12 @@ module Juicy
     include Comparable
   
 	  @@default_octave = 4
-    attr_reader :name, :pitch, :octave
+    attr_reader :name, :pitch, :duration, :octave
     
-    def initialize(name = "A", octave_change = 0)
+    def initialize(name = "A", duration = "quarter", octave_change = 0)
       @name = parse_note_name(name)
       @pitch = Pitch.new(@name)
+      @duration = Duration.new(duration)
 	    @octave = @@default_octave + octave_change
     end
     
@@ -29,8 +30,8 @@ module Juicy
     end
     
     def +(interval)
-	  step = PITCHES[@name]+interval
-	  octave_change = step/12 #mathy stuff to figure out how many octaves were traversed (cant assume just one was
+      step = PITCHES[@name]+interval
+      octave_change = step/12 #mathy stuff to figure out how many octaves were traversed (cant assume just one was
       name = PITCHES.key((PITCHES[@name]+interval) % 12)
       Note.new(name, @octave-@@default_octave + octave_change)
     end
@@ -40,11 +41,19 @@ module Juicy
     end
     
     def <=>(other_note)
-      if (self.octave <=> other_note.octave) == 0
+      if same_octave
         self.pitch <=> other_note.pitch
       else
         self.octave <=> other_note.octave
       end
+    end
+    
+    def length
+      duration
+    end
+    
+    def size
+      duration
     end
     
     private
@@ -65,6 +74,10 @@ module Juicy
         end
       end
       note_name.to_sym
+    end
+    
+    def same_octave
+      (self.octave <=> other_note.octave) == 0
     end
     
   end
