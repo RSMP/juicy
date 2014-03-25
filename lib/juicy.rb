@@ -11,3 +11,5 @@ require_relative 'juicy/pitch.rb' #toned (or not) frequency in a chosen pitch sp
   require_relative 'juicy/mode.rb' #'flavor' of diatonic scale
   require_relative 'juicy/scale_degree.rb' #index of given scale relative to root/tonic
   require_relative 'juicy/key.rb' #scale at a given root note, i.e. Juicy::Note
+  require_relative 'juicy/voice.rb' #an instrument
+  require_relative 'juicy/song.rb' #
