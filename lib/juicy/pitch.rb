@@ -1,6 +1,7 @@
 module Juicy
 
   PITCHES = {
+    _: 0,
     A: 0,
     A_sharp: 1,
     B_flat: 1,
@@ -71,8 +72,19 @@ module Juicy
       Win32::Sound.play_freq(options[:note].pitch.frequency, options[:note].duration)
     end
     
-    def play(options = {duration: 200, octave: 0})
-      Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration])
+    def play(options = {duration: 200, octave: 0, volume: 1})
+      options[:duration] ||= 200
+      options[:octave] ||= 0
+      options[:volume] ||= 1
+      Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume])
+    end
+    
+    def prepare(options = {duration: 200, octave: 0, volume: 1})
+      options[:duration] ||= 200
+      options[:octave] ||= 0
+      options[:volume] ||= 1
+      
+      return Thread.new{Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume], true)}
     end
     
     def <=>(other_pitch)

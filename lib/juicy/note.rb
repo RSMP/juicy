@@ -6,6 +6,7 @@ module Juicy
   
 	  @@default_octave = 4
     attr_reader :name, :pitch, :duration, :octave
+    attr_accessor :sum_of_queued_note_durations, :how_far_into_the_song_you_are
     
     def initialize(name = "A", duration = "quarter", octave_change = 0)
       @name = parse_note_name(name)
@@ -26,7 +27,37 @@ module Juicy
     end
     
     def play(options = {duration: 200, octave: (@octave-@@default_octave)})
+      if @name == :_
+        options[:volume] = 0
+      end
       @pitch.play(options)
+    end
+    
+    def prepare(options = {duration: 200, octave: (@octave-@@default_octave)})
+      options[:duration] = options[:duration] || 200
+      options[:octave] = options[:octave] || (@octave-@@default_octave)
+      if @name == :_
+        options[:volume] = 0
+      end
+      @prepared_note = @pitch.prepare(options)
+      #puts @prepared_note.status
+      until @prepared_note.status.eql? "sleep"
+        sleep 0.001
+        #puts @prepared_note.status
+        #Thread.pass
+      end
+      @prepared_note
+    end
+    
+    def play_prepared
+      #puts @prepared_note.status
+      until @prepared_note.status.eql? "sleep"
+        sleep 0.001
+        #puts @prepared_note.status
+        #Thread.pass
+      end
+      #puts "waking up"
+      @prepared_note.wakeup
     end
     
     def +(interval)
@@ -56,21 +87,37 @@ module Juicy
       duration
     end
     
+    def initial_play_time=(time)
+      @initial_play_time = time
+    end
+    
+    def initial_play_time
+      @initial_play_time
+    end
+    
+    def duration_in_milliseconds(tempo)
+      @duration.duration_in_milliseconds(tempo)
+    end
+    
     private
     
     def parse_note_name(name)
       # parses note name input
       # user should be able to say "A#" or "a#" or "a sharp" or "A_sharp" or "a_s"
       groups = name.to_s.match(/([a-gA-G])( |_)?(.*)/)
-      note_name = groups[1].upcase
-      unless groups[3].nil? || groups[3].empty?
-        note_name += case groups[3]
-        when /^(s|#)/
-          "_sharp"
-        when /^(f|b)/
-          "_flat"
-        else
-          puts "Unknown note modifier: '#{groups[3]}'"
+      if name.to_s.match "rest"
+        note_name = "_"
+      else
+        note_name = groups[1].upcase
+        unless groups[3].nil? || groups[3].empty?
+          note_name += case groups[3]
+          when /^(s|#)/
+            "_sharp"
+          when /^(f|b)/
+            "_flat"
+          else
+            puts "Unknown note modifier: '#{groups[3]}'"
+          end
         end
       end
       note_name.to_sym

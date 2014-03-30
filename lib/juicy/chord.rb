@@ -15,7 +15,7 @@ module Juicy
       @quality = options[:quality] || :major
       @inversion = options[:inversion] || 0
       @context = options[:context] || :none
-	  @type = :triad
+	    @type = :triad
     end
 	
 	def to_s
@@ -40,6 +40,7 @@ module Juicy
         pitches = pitches[1..-1] + [(pitches[0]+12)]
         inversion -= 1
       end
+      
       pitches.each do |interval|
         notes << Note.new(PITCHES.key((PITCHES[@root.name]+interval) % 12))
       end

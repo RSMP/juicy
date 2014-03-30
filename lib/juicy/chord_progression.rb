@@ -5,21 +5,11 @@ module Juicy
     attr_accessor :chords
     
     def initialize
-      #@chords = []
-      #@chords << Chord.new(root: :C)
-      #@chords << Chord.new(root: :G, inversion: 1)-12
-      #@chords << Chord.new(root: :A, quality: :minor)
-      #@chords << Chord.new(root: :F, inversion: 1)-12
       @chords = []
       @chords << Chord.new(root: :C)
-      @chords << Chord.new(root: :F, inversion: 2)-12
-      @chords << Chord.new(root: :G, inversion: 1)-12
+      @chords << Chord.new(root: :F, inversion: 2)
+      @chords << Chord.new(root: :G, inversion: 1)
       @chords << Chord.new(root: :C)
-      #@progression = []
-      #@progression << ScaleDegree.new("I")
-      #@progression << ScaleDegree.new("IV")
-      #@progression << ScaleDegree.new("V")
-      #@progression << ScaleDegree.new("I")
     end
     
     def inspect
@@ -36,6 +26,15 @@ module Juicy
         output += scale_degree.to_s + ", "
       end
       output[0..-3]
+    end
+    
+    def to_a
+      [Chord.new(root: "C"), Chord.new(root: "F", inversion: 1), Chord.new(root: "C"), Chord.new(root: "G")]
+      @chords
+    end
+    
+    def initial_play_time
+      0
     end
     
     def play
