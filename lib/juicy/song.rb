@@ -27,7 +27,7 @@ module Juicy
       
       #tracks << Track.new(chord_progression.initial_play_time, chord_progression.to_a, @tempo)
       
-      melody = Melody.new(chord_progression)
+      melody = Melody.new(chord_progression, self)
       tracks << Track.new(melody.initial_play_time, melody.to_a, @tempo)
       
       Track.play_concurrently(tracks)

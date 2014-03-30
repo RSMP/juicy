@@ -3,7 +3,7 @@ module Juicy
 
   class Melody
   
-    def initialize(chord_progression = ChordProgression.new)
+    def initialize(chord_progression = ChordProgression.new, song = Song.new)
       
       @notes = [
         Note.new("C", "half", 1),Note.new("E", "", 1),Note.new("G", "", 1),
@@ -13,6 +13,8 @@ module Juicy
       ]
       
       @notes = []
+      
+      
       
       (125).times do
         @notes << Note.new(([*"A".."G"]+["rest"]).sample + ["#", "b", ""].sample, ["eighth", "half", "quarter"].sample, [*0..1].sample)
