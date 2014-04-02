@@ -1,4 +1,6 @@
 
+require_relative 'win32-mmlib_structs'
+
 module Win32
 
   class Sound

@@ -176,7 +176,7 @@ module Juicy
           beat.each do |note|
             last_note = note.play_prepared
           end
-          #sleep rand(100..300)/1000.0
+          sleep rand(100..300)/1000.0
           sleep_amount = Duration.duration_of_quarter_note_in_milliseconds(tempo)/1000.0 - (Time.now - time)
           puts sleep_amount
           sleep sleep_amount unless sleep_amount < 0

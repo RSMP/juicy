@@ -40,6 +40,9 @@ module Juicy
       melody = Melody.new(chord_progression, self)
       puts melody.inspect
       tracks << Track.new(melody.initial_play_time, melody.to_a, @tempo)
+      melody = Melody.new(chord_progression, self)
+      puts melody.inspect
+      tracks << Track.new(melody.initial_play_time, melody.to_a, @tempo)
       
       Track.play_concurrently(tracks, @tempo)
       

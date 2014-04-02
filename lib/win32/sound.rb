@@ -1,7 +1,5 @@
 require 'ffi'
 
-require_relative 'win32-mmlib_structs'
-
 # The Win32 module serves as a namespace only.
 module Win32
 
