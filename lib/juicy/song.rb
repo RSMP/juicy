@@ -3,6 +3,8 @@ module Juicy
 
   class Song
   
+    attr_reader :measures, :tempo
+  
     def initialize
     
       #a song has a key, a mode, voices, tempo, time signature, 
@@ -12,6 +14,8 @@ module Juicy
       @mode = :major
       @tempo = 150.0
       @time_signature = [4,4]
+      @measures = []
+      4.times {@measures << Measure.new(@time_signature)}
       
     end
     
@@ -28,9 +32,16 @@ module Juicy
       #tracks << Track.new(chord_progression.initial_play_time, chord_progression.to_a, @tempo)
       
       melody = Melody.new(chord_progression, self)
+      puts melody.inspect
+      tracks << Track.new(melody.initial_play_time, melody.to_a, @tempo)
+      melody = Melody.new(chord_progression, self)
+      puts melody.inspect
+      tracks << Track.new(melody.initial_play_time, melody.to_a, @tempo)
+      melody = Melody.new(chord_progression, self)
+      puts melody.inspect
       tracks << Track.new(melody.initial_play_time, melody.to_a, @tempo)
       
-      Track.play_concurrently(tracks)
+      Track.play_concurrently(tracks, @tempo)
       
     
     end

@@ -29,7 +29,7 @@ module Juicy
     end
     
     def to_a
-      [Chord.new(root: "C"), Chord.new(root: "F", inversion: 1), Chord.new(root: "C"), Chord.new(root: "G")]
+      [Chord.new(root: "C")]
       @chords
     end
     

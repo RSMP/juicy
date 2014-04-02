@@ -7,6 +7,10 @@ module Juicy
       
     end
     
+    def self.duration_of_quarter_note_in_milliseconds(tempo)
+      60_000.0/tempo
+    end
+    
     def duration_in_milliseconds(tempo)
       # how long a note is depends on the tempo and the musical duration
       # e.g. at 120 bpm, and a duration of an eighth note, the duration
@@ -31,6 +35,8 @@ module Juicy
         4.0
       when "eighth"
         0.5
+      when "sixteenth"
+        0.25
       else
         1.0
       end
@@ -44,6 +50,8 @@ module Juicy
         return "half"
       when "eighth"
         return "eighth"
+      when "sixteenth"
+        return "sixteenth"
       else
         return "quarter"
       end

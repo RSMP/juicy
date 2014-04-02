@@ -10,17 +10,22 @@ module Juicy
       
     }
     
-    def initialize(options = {root: Note.new(:C), quality: :major, inversion: 0, context: :none})
+    attr_reader :duration
+    attr_accessor :sum_of_queued_chord_durations, :how_far_into_the_song_you_are
+    
+    def initialize(options = {root: Note.new(:C), quality: :major, inversion: 0, context: :none, duration: Duration.new("quarter")})
       @root = (options[:root].kind_of?(Note) ? options[:root] : Note.new(options[:root])) || Note.new(:C)
       @quality = options[:quality] || :major
       @inversion = options[:inversion] || 0
       @context = options[:context] || :none
+      @duration = options[:duration] || Duration.new("quarter")
 	    @type = :triad
+      @notes = [@root, @root+2, @root+4]
     end
 	
-	def to_s
-	  "chord type: #{@type}, quality: #{@quality}, root: #{@root}, inversion: #{@inversion}"
-	end
+    def to_s
+      "chord type: #{@type}, quality: #{@quality}, root: #{@root}, inversion: #{@inversion}"
+    end
     
     def inspect
       "#{@root.name} #{@quality} Chord, inversion: #{@inversion}"
@@ -108,6 +113,41 @@ module Juicy
     end
     
     alias_method :invert, :cycle
+    
+    def prepare(options = {duration: 200, octave: (@octave-Note.default_octave)})
+      @prepared_notes = []
+      @notes.each do |note|
+        options[:duration] = options[:duration] || 200
+        options[:octave] = options[:octave] || (note.octave-Note.default_octave)
+        
+        @prepared_notes << note.prepare(options)
+      end
+    end
+    
+    def play_prepared
+      th = []
+      #puts @prepared_notes.inspect
+      @prepared_notes.each do |note|
+        th << Thread.new {
+          note.play_prepared.join
+          
+          
+        }
+      end
+     th.each {|t| t.join}
+    end
+    
+    def initial_play_time=(time)
+      @initial_play_time = time
+    end
+    
+    def initial_play_time
+      @initial_play_time
+    end
+    
+    def duration_in_milliseconds(tempo)
+      @duration.duration_in_milliseconds(tempo)
+    end
     
   end
   

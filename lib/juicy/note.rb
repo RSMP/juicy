@@ -5,8 +5,9 @@ module Juicy
     include Comparable
   
 	  @@default_octave = 4
-    attr_reader :name, :pitch, :duration, :octave
+    attr_reader :name, :pitch, :duration, :octave, :occupying_beat
     attr_accessor :sum_of_queued_note_durations, :how_far_into_the_song_you_are
+    attr_accessor :distance_from_beat_in_milliseconds
     
     def initialize(name = "A", duration = "quarter", octave_change = 0)
       @name = parse_note_name(name)
@@ -39,23 +40,27 @@ module Juicy
       if @name == :_
         options[:volume] = 0
       end
+        Thread.pass
       @prepared_note = @pitch.prepare(options)
+      @prepared_note[:sleep_time] = @distance_from_beat_in_milliseconds/1000.0
       #puts @prepared_note.status
       until @prepared_note.status.eql? "sleep"
         sleep 0.001
         #puts @prepared_note.status
-        #Thread.pass
       end
       @prepared_note
+      self
     end
     
     def play_prepared
       #puts @prepared_note.status
+      #puts "playing"
       until @prepared_note.status.eql? "sleep"
         sleep 0.001
         #puts @prepared_note.status
         #Thread.pass
       end
+      #Thread.pass
       #puts "waking up"
       @prepared_note.wakeup
     end
@@ -96,7 +101,20 @@ module Juicy
     end
     
     def duration_in_milliseconds(tempo)
+      #puts tempo
       @duration.duration_in_milliseconds(tempo)
+    end
+    
+    def self.default_octave
+      @@default_octave
+    end
+    
+    def plays_during(beat)
+      @occupying_beat = beat
+    end
+    
+    def plays_during?(beat)
+      beat == @occupying_beat
     end
     
     private
@@ -105,6 +123,7 @@ module Juicy
       # parses note name input
       # user should be able to say "A#" or "a#" or "a sharp" or "A_sharp" or "a_s"
       groups = name.to_s.match(/([a-gA-G])( |_)?(.*)/)
+      puts "name: #{name}" if groups.nil?
       if name.to_s.match "rest"
         note_name = "_"
       else

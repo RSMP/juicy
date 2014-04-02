@@ -1,7 +1,7 @@
 module Juicy
 
   PITCHES = {
-    _: 0,
+    _: -1,
     A: 0,
     A_sharp: 1,
     B_flat: 1,
