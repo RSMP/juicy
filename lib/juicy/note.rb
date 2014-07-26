@@ -4,16 +4,19 @@ module Juicy
   
     include Comparable
   
-	  @@default_octave = 4
+	  @@default_octave = 5
     attr_reader :name, :pitch, :duration, :octave, :occupying_beat
     attr_accessor :sum_of_queued_note_durations, :how_far_into_the_song_you_are
     attr_accessor :distance_from_beat_in_milliseconds
     
-    def initialize(name = "A", duration = "quarter", octave_change = 0)
-      @name = parse_note_name(name)
+    def initialize(options = {name: "A", duration: :quarter, octave_change: 0})
+      options[:name] ||= "A"
+      options[:duration] ||= :quarter
+      options[:octave_change] ||= 0
+      @name = parse_note_name(options[:name])
       @pitch = Pitch.new(@name)
-      @duration = Duration.new(duration)
-	    @octave = @@default_octave + octave_change
+      @duration = Duration.new(options[:duration])
+	    @octave = @@default_octave + options[:octave_change]
     end
     
     def to_s
@@ -22,7 +25,7 @@ module Juicy
       name += "b" if @name=~/flat/
       "#{name}#{@octave}"
     end
-	
+	  
     def inspect
       "#{@name}"
     end
@@ -66,22 +69,29 @@ module Juicy
     end
     
     def +(interval)
-      step = PITCHES[@name]+interval
-      octave_change = step/12 #mathy stuff to figure out how many octaves were traversed (cant assume just one was
-      name = PITCHES.key((PITCHES[@name]+interval) % 12)
-      Note.new(name, @octave-@@default_octave + octave_change)
+      step(interval)
+      Note.new(name: new_name, octave_change: octave_change)
     end
     
     def -(interval)
-      Note.new(PITCHES.key((PITCHES[@name]-interval) % 12))
+      step(-1*interval)
+      Note.new(name: new_name, octave_change: octave_change)
     end
     
     def <=>(other_note)
-      if same_octave
+      if same_octave(other_note)
         self.pitch <=> other_note.pitch
       else
         self.octave <=> other_note.octave
       end
+    end
+    
+    def succ
+      return (self+1)
+    end
+    
+    def prev
+      return (self-1)
     end
     
     def length
@@ -101,7 +111,6 @@ module Juicy
     end
     
     def duration_in_milliseconds(tempo)
-      #puts tempo
       @duration.duration_in_milliseconds(tempo)
     end
     
@@ -117,12 +126,29 @@ module Juicy
       beat == @occupying_beat
     end
     
+    def duration=(duration)
+      @duration = Duration.new(duration)
+    end
+    
     private
+    
+    def octave_change
+      @octave - @@default_octave + @step/12
+    end
+    
+    def step(interval)
+      @step = PITCHES[@name]+interval
+    end
+    
+    def new_name
+      PITCHES.key((@step) % 12)
+    end
     
     def parse_note_name(name)
       # parses note name input
       # user should be able to say "A#" or "a#" or "a sharp" or "A_sharp" or "a_s"
       groups = name.to_s.match(/([a-gA-G])( |_)?(.*)/)
+      #binding.pry
       puts "name: #{name}" if groups.nil?
       if name.to_s.match "rest"
         note_name = "_"
@@ -136,13 +162,14 @@ module Juicy
             "_flat"
           else
             puts "Unknown note modifier: '#{groups[3]}'"
+            ""
           end
         end
       end
       note_name.to_sym
     end
     
-    def same_octave
+    def same_octave(other_note)
       (self.octave <=> other_note.octave) == 0
     end
     

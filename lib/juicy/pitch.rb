@@ -24,6 +24,9 @@ module Juicy
     G_sharp: 11,
     A_flat: 11
   }
+  
+  # This class encapsulates all of the pitch mechanics for a given temperament.
+  # 
 
   class Pitch
   
@@ -32,6 +35,7 @@ module Juicy
     @@pitch_standard = 440.0
     
     attr_reader :frequency, :confidence
+  
   
     def initialize(pitch = @@pitch_standard, tune_now = true)
       
@@ -58,6 +62,7 @@ module Juicy
         @frequency = @@pitch_standard*2**((step.round)/12.0)
         @tuned = true
       end
+      self
     end
     
     def +(interval)
