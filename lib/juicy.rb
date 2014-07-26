@@ -1,6 +1,6 @@
 # require 'win32-sound'
 # require_relative 'juicy/win32/sound.rb'
-require 'pry'
+#require 'pry'
 require_relative 'win32/sound'
 require_relative 'win32/wave_out_play_freq'
 

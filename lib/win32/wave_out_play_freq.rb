@@ -31,18 +31,13 @@ module Win32
         raise ArgumentError, 'invalid duration'
       end
     
-      stream(pause_execution) { |wfx|
+      stream(pause_execution) do |wfx|
         data = generate_pcm_integer_array_for_freq(frequency, duration, volume)
         data_buffer = FFI::MemoryPointer.new(:int, data.size)
         data_buffer.write_array_of_int data
         buffer_length = wfx[:nAvgBytesPerSec]*duration/1000
-        hdr = WAVEHDR.new(data_buffer, buffer_length)
-        hdr[:lpData] = data_buffer
-        hdr[:dwBufferLength] = buffer_length
-        hdr[:dwFlags] = 0
-        hdr[:dwLoops] = 1
-        hdr
-      }
+        WAVEHDR.new(data_buffer, buffer_length)
+      end
       
     end
   

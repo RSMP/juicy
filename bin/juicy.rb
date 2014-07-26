@@ -1,6 +1,6 @@
 require_relative '../lib/juicy.rb'
 include Juicy
-play = true
+play = false
 # To make a pitch, give it a frequency.
 # By default, the frequency will be tuned to the nearest
 # frequency in equal temperament.
@@ -9,6 +9,7 @@ pitch = Pitch.new(445)
 puts pitch
 pitch.play if play
 
+sleep 0.3
 puts "----------"
 # A Note is a Pitch with a name.
 # You give it a note name and an octave
@@ -17,6 +18,7 @@ note = Note.new(name: "G#", octave_change: -1)
 puts note
 note.play if play
 
+sleep 0.3
 puts "----------"
 # You can also add or subtract from a note to go to the next half step
 note += 1
@@ -26,6 +28,7 @@ note -= 2
 puts note
 note.play if play
 
+sleep 0.3
 puts "----------"
 # With this much, you can make your own scales!
 note = Note.new(name: "C")
@@ -38,6 +41,7 @@ end
 puts note
 note.play if play
 
+sleep 0.3
 puts "----------"
 # Of course, this is cumbersome to do all on our own,
 # so you have a Scale available to you.
@@ -58,8 +62,9 @@ end
 # current development work is being done on scale objects
 # and a beat sequencer to bring it all together.
 
+sleep 0.3
 scale = Scale.new(:major, Note.new(name: "G", octave_change: -1))
 puts scale
 scale.each_note do |note|
-  note.play
+  note.play if play
 end
