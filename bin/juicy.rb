@@ -1,6 +1,6 @@
 require_relative '../lib/juicy.rb'
 include Juicy
-play = false
+play = true
 # To make a pitch, give it a frequency.
 # By default, the frequency will be tuned to the nearest
 # frequency in equal temperament.
