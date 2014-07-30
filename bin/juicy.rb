@@ -68,3 +68,12 @@ puts scale
 scale.each_note do |note|
   note.play if play
 end
+
+puts
+
+# threads = []
+# 
+# [660, 440].each do |tone|
+#   threads << Thread.new {Win32::Sound.play_freq(tone, 200)}
+# end
+# threads.each {|t| t.join}

@@ -24,19 +24,17 @@ module Juicy
     G_sharp: 11,
     A_flat: 11
   }
-  
+
   # This class encapsulates all of the pitch mechanics for a given temperament.
   # 
-
   class Pitch
-  
+
     include Comparable
     @@temperament = :equal
     @@pitch_standard = 440.0
-    
+
     attr_reader :frequency, :confidence
-  
-  
+
     def initialize(pitch = @@pitch_standard, tune_now = true)
       
       if pitch.kind_of? Numeric
@@ -50,11 +48,11 @@ module Juicy
       end
       
     end
-	
+
     def to_s
       "#{@frequency}"
     end
-    
+
     def tune
       if out_of_tune
         step = Math.log(@frequency/440.0,2)*12
@@ -64,26 +62,26 @@ module Juicy
       end
       self
     end
-    
+
     def +(interval)
       change_by (interval)
     end
-    
+
     def -(interval)
       change_by (-interval)
     end
-    
+
     def self.play(options = {duration: 200})
       Win32::Sound.play_freq(options[:note].pitch.frequency, options[:note].duration)
     end
-    
+
     def play(options = {duration: 200, octave: 0, volume: 1})
       options[:duration] ||= 200
       options[:octave] ||= 0
       options[:volume] ||= 1
       Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume])
     end
-    
+
     def prepare(options = {duration: 200, octave: 0, volume: 1})
       options[:duration] ||= 200
       options[:octave] ||= 0
@@ -91,23 +89,23 @@ module Juicy
       
       return Thread.new{Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume], true)}
     end
-    
+
     def <=>(other_pitch)
       self.frequency <=> other_pitch.frequency
     end
-    
+
     private
-    
+
     def out_of_tune
       !@tuned
     end
-    
+
     def change_by (interval)
       if @@temperament.eql? :equal
         Pitch.new(@frequency*2**(interval/12.0))
       end
     end
-    
+
   end
 
 end
