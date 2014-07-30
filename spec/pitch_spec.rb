@@ -14,5 +14,35 @@ describe Pitch do
       expect(pitch.confidence).to eq(100)
     end
   end
+  
+  describe "#+" do
+    context "when you add 1 to a pitch" do
+      it "should return a pitch with a higher frequency" do
+        pitch = Pitch.new
+        expect((pitch + 1).frequency).to be > pitch.frequency
+      end
+    end
+    context "when you add -1 to a pitch" do
+      it "should return a pitch with a lower frequency" do
+        pitch = Pitch.new
+        expect((pitch + (-1)).frequency).to be < pitch.frequency
+      end
+    end
+  end
+  
+  describe "#-" do
+    context "when you subtract 1 from a pitch" do
+      it "should return a pitch with a lower frequency" do
+        pitch = Pitch.new
+        expect((pitch - 1).frequency).to be < pitch.frequency
+      end
+    end
+    context "when you subtract -1 from a pitch" do
+      it "should return a pitch with a higher frequency" do
+        pitch = Pitch.new
+        expect((pitch - (-1)).frequency).to be > pitch.frequency
+      end
+    end
+  end
 
 end
