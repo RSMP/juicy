@@ -10,17 +10,18 @@ module Juicy
       
     }
     
-    attr_reader :duration
+    attr_reader :duration, :notes
     attr_accessor :sum_of_queued_chord_durations, :how_far_into_the_song_you_are
     
-    def initialize(options = {root: Note.new(:C), quality: :major, inversion: 0, context: :none, duration: Duration.new("quarter")})
-      @root = (options[:root].kind_of?(Note) ? options[:root] : Note.new(options[:root])) || Note.new(:C)
+    def initialize(options = {root: Note.new(name: :C), quality: :major, inversion: 0, context: :none, duration: Duration.new("quarter")})
+      #binding.pry
+      @root = (options[:root].kind_of?(Note) ? options[:root] : Note.new(name: options[:root])) || Note.new(name: :C)
       @quality = options[:quality] || :major
       @inversion = options[:inversion] || 0
       @context = options[:context] || :none
       @duration = options[:duration] || Duration.new("quarter")
 	    @type = :triad
-      @notes = [@root, @root+2, @root+4]
+      @notes = [@root + QUALITIES[@quality][0], @root + QUALITIES[@quality][1], @root + QUALITIES[@quality][2]]
     end
 	
     def to_s
@@ -47,7 +48,7 @@ module Juicy
       end
       
       pitches.each do |interval|
-        notes << Note.new(PITCHES.key((PITCHES[@root.name]+interval) % 12))
+        notes << Note.new(name: PITCHES.key((PITCHES[@root.name]+interval) % 12))
       end
       
       case style

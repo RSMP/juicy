@@ -1,4 +1,3 @@
-
 require_relative 'win32-mmlib_structs'
 
 module Win32
@@ -31,13 +30,13 @@ module Win32
         raise ArgumentError, 'invalid duration'
       end
     
-      stream(pause_execution) { |wfx|
+      stream(pause_execution) do |wfx|
         data = generate_pcm_integer_array_for_freq(frequency, duration, volume)
         data_buffer = FFI::MemoryPointer.new(:int, data.size)
         data_buffer.write_array_of_int data
         buffer_length = wfx[:nAvgBytesPerSec]*duration/1000
         WAVEHDR.new(data_buffer, buffer_length)
-      }
+      end
       
     end
   
@@ -63,6 +62,14 @@ module Win32
     
       hWaveOut = HWAVEOUT.new
       wfx = WAVEFORMATEX.new
+
+      wfx[:wFormatTag] = WAVE_FORMAT_PCM
+      wfx[:nChannels] = 1
+      wfx[:nSamplesPerSec] = 44100
+      wfx[:wBitsPerSample] = 16
+      wfx[:cbSize] = 0
+      wfx[:nBlockAlign] = (wfx[:wBitsPerSample] >> 3) * wfx[:nChannels]
+      wfx[:nAvgBytesPerSec] = wfx[:nBlockAlign] * wfx[:nSamplesPerSec]
       
       if ((error_code = waveOutOpen(hWaveOut.pointer, WAVE_MAPPER, wfx.pointer, 0, 0, 0)) != 0)
         raise SystemCallError.new('waveOutOpen', FFI.errno)

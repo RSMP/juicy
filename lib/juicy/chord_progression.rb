@@ -4,12 +4,22 @@ module Juicy
   
     attr_accessor :chords
     
-    def initialize
-      @chords = []
-      @chords << Chord.new(root: :C)
-      @chords << Chord.new(root: :F, inversion: 2)
-      @chords << Chord.new(root: :G, inversion: 1)
-      @chords << Chord.new(root: :C)
+    def initialize(key, mode, numerals = [1,4,1,5])
+    
+      @numerals = numerals
+      
+      #given a key and a mode, a number can tell me what chord.
+      
+      @chords = [
+        Chord.new(root: "A", quality: :major),
+        Chord.new(root: "D", quality: :major),
+        Chord.new(root: "A", quality: :major),
+        Chord.new(root: "E", quality: :major)
+      ]
+     #@numerals.each do |numeral|
+     #  @chords << Chord.new(numeral)
+     #end
+      
     end
     
     def inspect

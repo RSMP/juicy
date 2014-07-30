@@ -8,9 +8,24 @@ module Juicy
     def initialize(init_time, notes, tempo)
     
       @start_time = init_time
-      @notes = notes
+      @notes = notes.to_a
       @tempo = tempo
+      
+      @track_length_in_milliseconds = 0
+      @notes.each do |note|
+        note.distance_from_beat_in_milliseconds = distance_from_beat_in_milliseconds
+        note.plays_during occupying_beat
+        @track_length_in_milliseconds += note.duration_in_milliseconds(@tempo)
+      end
     
+    end
+    
+    def distance_from_beat_in_milliseconds
+      (@track_length_in_milliseconds.round % Duration.duration_of_quarter_note_in_milliseconds(@tempo).round)
+    end
+    
+    def occupying_beat
+      @track_length_in_milliseconds.round / Duration.duration_of_quarter_note_in_milliseconds(@tempo).round + 1
     end
   
     def play
@@ -116,14 +131,14 @@ module Juicy
     end
     
     def self.play_concurrently(tracks, tempo)
-      @song_start_time = Time.now
+      #@song_start_time = Time.now
       threads = []
       # iterate over each track over and over again, preparing notes in the current beat
       # in each iteration, store the notes you've prepared into an array and store that
       # array into the prepared_notes array which the playing thread will play notes from
       # when it has enough to play.
       # A track is an array of playable musical objects.  for now, these are individual
-      # notes or chords.  a chord is an array of individual notes
+      # notes or chords.  a chord is an array of individual notes to be played simultaneously
       #
       prepared_beats = []
       out_of_notes_to_prepare = false
@@ -131,12 +146,25 @@ module Juicy
         Thread.current[:name] = "prepare beats thread"
         current_beat = 1
         last_beat = 1
+        # find the final beat of all tracks combined
         tracks.each do |track|
-          track.notes.each do |note|
-            last_beat = note.occupying_beat if note.occupying_beat > last_beat
+          track.notes.each do |playable_thing|
+            if playable_thing.kind_of?(Note)
+              last_beat = playable_thing.occupying_beat if playable_thing.occupying_beat > last_beat
+            elsif playable_thing.kind_of?(Chord)
+              playable_thing.notes.each do |note|
+                last_beat = note.occupying_beat if note.occupying_beat > last_beat
+              end
+            end
           end
         end
+        # until you've prepared all the notes, prepare each note in an array with
+        # other notes who occupy the same beat
         until current_beat > last_beat
+          # only add/prepare beats if there are fewer than 20 prepared already
+          # so that we don't hit the thread limit.  This assumes that a buffer of 20
+          # is sufficent and that each beat has, on average, fewer than 30 notes.
+          # if there are too many notes, weird things start to happen, so don't do that.
           if prepared_beats.size <= 20
             this_beats_notes = []
             tracks.each do |track|
@@ -154,6 +182,7 @@ module Juicy
             prepared_beats << this_beats_notes
             current_beat += 1
           end
+          # Pass thread execution over to note playing so that there is no delay in playback
           Thread.pass
         end
         out_of_notes_to_prepare = true
@@ -165,26 +194,27 @@ module Juicy
         # "start" the song by iterating through each element, waking up each note
         # and then waiting the remainder of a beat's worth of milliseconds until the
         # next beat
-        until (prepared_beats.size >= 2) || out_of_notes_to_prepare
+        until (prepared_beats.size >= 4) || out_of_notes_to_prepare
           sleep 0.01
         end
         last_note = Thread.new {}
         time = Time.now
         until prepared_beats.empty? && out_of_notes_to_prepare
           time = Time.now
+          # take the next beat's worth of notes
           beat = prepared_beats.shift
+          # start each note in the beat as its own thread
           beat.each do |note|
             last_note = note.play_prepared
           end
-          sleep rand(100..300)/1000.0
+          # to ensure simultaneity, sleep for however much longer a beat lasts
+          # at the current tempo
           sleep_amount = Duration.duration_of_quarter_note_in_milliseconds(tempo)/1000.0 - (Time.now - time)
-          puts sleep_amount
           sleep sleep_amount unless sleep_amount < 0
         end
         last_note.join
       end
       
-      #threads.each {|t| puts t[:name] }
       threads.each {|t| t.join}
     end
     

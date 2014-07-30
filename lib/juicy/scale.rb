@@ -62,14 +62,40 @@ module Juicy
       generate_notes
     end
     
+    #def each
+    #  yield SCALE_TYPES[@type]
+    #end
+    
     def each
-      yield SCALE_TYPES[@type]
+      (SCALE_TYPES[@type].size+1).times do
+        yield @notes.next.name
+      end
     end
     
     def each_note
       (SCALE_TYPES[@type].size+1).times do
         yield @notes.next
       end
+    end
+    
+    def interval_between(note1, note2)
+      half_steps = 0
+      direction = (note1 <=> note2)
+      if direction == 0
+      elsif direction == -1
+        note = note1.dup
+        until (note <=> note2) == 0
+          note += 1
+          half_steps += 1
+        end
+      elsif direction == 1
+        note = note1.dup
+        until (note <=> note2) == 0
+          note -= 1
+          half_steps -= 1
+        end
+      end
+      half_steps
     end
     
     private

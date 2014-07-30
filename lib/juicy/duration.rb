@@ -2,8 +2,22 @@ module Juicy
 
   class Duration
   
+    DURATIONS = ["whole", "half", "quarter", "eighth", "sixteenth", "thirty-second", "sixty-fourth"]
+    MULTIPLIER = {:"" => 0, :triplet => -1, :dotted => 1}
+    
+    attr_reader :duration
+      
     def initialize(duration)
-      @duration = parse_duration(duration)
+      # @duration is a Rational number which represents the length of
+      # a note relative to a quarter note
+      # ex. Duration.new("dotted eighth")
+      #  @duration = Rational(3,4)
+      #
+      if duration.kind_of? Rational
+        @duration = duration
+      else
+        @duration = parse_duration(duration)
+      end
       
     end
     
@@ -22,39 +36,41 @@ module Juicy
     def to_s
       @duration.to_s
     end
+    
+    def to_f
+      @duration.to_f
+    end
+    
+    def +(other_duration)
+      Duration.new(@duration + other_duration.duration)
+    end
+    
+    def *(scalar)
+      Duration.new(@duration*scalar)
+    end
   
     private
     
     def beats_of_given_type_per_quarter_note
-      case @duration
-      when "quarter"
-        1.0
-      when "half"
-        2.0
-      when "whole"
-        4.0
-      when "eighth"
-        0.5
-      when "sixteenth"
-        0.25
-      else
-        1.0
-      end
+      @duration.to_f
     end
     
+    #  takes user input and constructs a Rational number
+    #  ex. "dotted eighth"
+    #  Rational(3**
+    #
     def parse_duration(duration)
-      case duration
-      when "quarter"
-        return "quarter"
-      when "half"
-        return "half"
-      when "eighth"
-        return "eighth"
-      when "sixteenth"
-        return "sixteenth"
-      else
-        return "quarter"
-      end
+      
+      # parses note name input
+      # user should be able to say "dotted sixteenth" or "quarter" or "triplet eighth"
+      groups = duration.to_s.match(/^((dotted|triplet)( |_))?(.*)$/)
+      puts "duration: #{duration}" if groups.nil?
+      
+      d = DURATIONS.index(groups[4])
+      multiplier = MULTIPLIER[groups[2].to_s.to_sym]
+      #binding.pry
+      
+      Rational(4*(3**multiplier),(2**(multiplier+d)))
     end
   
   end

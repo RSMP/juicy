@@ -18,6 +18,11 @@ module Win32
 
   class WAVEFORMATEX < FFI::Struct
   
+    # Initializes struct with sensible defaults for most commonly used
+    # values.  While setting these manually is possible, please be
+    # sure you know what changes will result in, as an incorrectly
+    # set struct will result in unpredictable behavior.
+    #
     def initialize(nSamplesPerSec = 44100, wBitsPerSample = 16, nChannels = 1, cbSize = 0)
       self[:wFormatTag] = WAVE_FORMAT_PCM
       self[:nChannels] = nChannels
@@ -44,6 +49,11 @@ module Win32
 
   class WAVEHDR < FFI::Struct
   
+    # Initializes struct with sensible defaults for most commonly used
+    # values.  While setting these manually is possible, please be
+    # sure you know what changes will result in, as an incorrectly
+    # set struct will result in unpredictable behavior.
+    #
     def initialize(lpData, dwBufferLength, dwFlags = 0, dwLoops = 1)
       self[:lpData] = lpData
       self[:dwBufferLength] = dwBufferLength
