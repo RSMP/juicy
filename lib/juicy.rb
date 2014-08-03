@@ -1,8 +1,6 @@
 # require 'win32-sound'
-# require_relative 'juicy/win32/sound.rb'
-require 'pry'
-#require_relative '../../win32-sound/lib/win32/sound' #mean-time use of local version of win32-sound library
-require_relative '../../sound/lib/sound.rb'
+#require 'pry'
+require 'sound'
 
 require_relative 'juicy/pitch' #toned (or not) frequency in a chosen pitch space (temperament/intonation)
   require_relative 'juicy/note' #named pitch

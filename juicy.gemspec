@@ -2,8 +2,8 @@
 Gem::Specification.new do |spec|
 
   spec.name = 'juicy'
-  spec.version = '0.1.1'
-  spec.date = '2014-07-26'
+  spec.version = '0.1.2'
+  spec.date = '2014-08-03'
   spec.summary = 'Song writing tool'
   spec.description = 'Generates songs'
   spec.authors = ["Dominic Muller"]
@@ -24,13 +24,9 @@ Gem::Specification.new do |spec|
     "lib/juicy/song.rb",
     "lib/juicy/track.rb",
     "lib/juicy/voice.rb",
-    "bin/juicy.rb",
-    "lib/win32/sound.rb",
-    "lib/win32/wave_out_play_freq.rb",
-    "lib/win32/win32-mmlib_structs.rb"
+    "bin/juicy.rb"
   ]
-  #spec.add_runtime_dependency 'win32-sound', ['>= 0.6.0']
-  spec.add_runtime_dependency 'ffi'
+  spec.add_runtime_dependency 'sound', ['>= 0.0.2']
   spec.homepage = 'https://github.com/RSMP/juicy'
   spec.license = 'MIT'
   
