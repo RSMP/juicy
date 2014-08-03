@@ -20,7 +20,7 @@ frequency in equal temperament.
 A Note is a Pitch with a name.
 You give it a note name and an octave
 
-    note = Juicy::Note.new("G#", -1)
+    note = Juicy::Note.new(name: "G#", octave_change: -1)
     note.play
 
 You can also add or subtract from a note to go to the next half step
@@ -32,7 +32,7 @@ You can also add or subtract from a note to go to the next half step
 
 With this much, you can make your own scales!
 
-    note = Juicy::Note.new("C")
+    note = Juicy::Note.new(name: "C")
     major_scale = [2,2,1,2,2,2,1]
     major_scale.each do |step|
       puts note
@@ -44,7 +44,8 @@ With this much, you can make your own scales!
 Of course, this is cumbersome to do all on our own,
 so you have a Scale available to you.
 
-    scale = Juicy::Scale.new(:major, Note.new("D", -1))
+    root = Juicy::Note.new(name: "D", octave_change: -1)
+    scale = Juicy::Scale.new(:major, root)
     scale.each_note do |note|
       note.play
     end
