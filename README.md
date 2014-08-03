@@ -3,19 +3,24 @@ juicy
 
 Song creation software for the Ruby developer
 
+Simply
+
+    gem install juicy
+
 Some Examples
 =====
 To make a pitch, give it a frequency.
 By default, the frequency will be tuned to the nearest
 frequency in equal temperament.
 
-    pitch = Pitch.new(445)
-    pitch.play
+    require 'juicy'
+    pitch = Juicy::Pitch.new(445)
+    pitch.play # audio playback only implemented for Windows platforms
 
 A Note is a Pitch with a name.
 You give it a note name and an octave
 
-    note = Note.new("G#", -1)
+    note = Juicy::Note.new("G#", -1)
     note.play
 
 You can also add or subtract from a note to go to the next half step
@@ -27,7 +32,7 @@ You can also add or subtract from a note to go to the next half step
 
 With this much, you can make your own scales!
 
-    note = Note.new("C")
+    note = Juicy::Note.new("C")
     major_scale = [2,2,1,2,2,2,1]
     major_scale.each do |step|
       puts note
@@ -39,7 +44,7 @@ With this much, you can make your own scales!
 Of course, this is cumbersome to do all on our own,
 so you have a Scale available to you.
 
-    scale = Scale.new(:major, Note.new("D", -1))
+    scale = Juicy::Scale.new(:major, Note.new("D", -1))
     scale.each_note do |note|
       note.play
     end
