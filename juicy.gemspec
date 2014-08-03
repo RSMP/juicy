@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
     "bin/juicy.rb"
   ]
   spec.add_runtime_dependency 'sound', '~> 0.0', '>= 0.0.2'
+  spec.add_development_dependency 'rspec'
   spec.homepage = 'https://github.com/RSMP/juicy'
   spec.license = 'MIT'
   

@@ -1,4 +1,4 @@
-require_relative '../lib/juicy.rb'
+require 'spec_helper'
 include Juicy
 
 describe Pitch do
