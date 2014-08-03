@@ -72,14 +72,15 @@ module Juicy
     end
 
     def self.play(options = {duration: 200})
-      Win32::Sound.play_freq(options[:note].pitch.frequency, options[:note].duration)
+      binding.pry
+      Sound::Out.play_freq(options[:note].pitch.frequency, options[:note].duration)
     end
 
     def play(options = {duration: 200, octave: 0, volume: 1})
       options[:duration] ||= 200
       options[:octave] ||= 0
       options[:volume] ||= 1
-      Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume])
+      ::Sound::Out.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume])
     end
 
     def prepare(options = {duration: 200, octave: 0, volume: 1})
