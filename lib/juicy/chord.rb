@@ -6,8 +6,7 @@ module Juicy
       :major => [0, 4, 7],
       :minor => [0, 3, 7],
       :diminished => [0, 3, 6],
-      :augmented => [0, 4, 8],
-      
+      :augmented => [0, 4, 8]
     }
     
     attr_reader :duration, :notes
