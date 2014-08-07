@@ -24,6 +24,8 @@ module Juicy
 
     class Scale
     include Enumerable
+    
+    attr_reader :root
 
     def initialize(type = :major, root = Note.new)
       case type
@@ -72,9 +74,13 @@ module Juicy
       end
     end
     
-    def each_note
-      (SCALE_TYPES[@type].size+1).times do
-        yield @notes.next
+    def each_note &block
+      if block_given?
+        (SCALE_TYPES[@type].size+1).times do
+          yield @notes.next
+        end
+      else
+        @notes
       end
     end
     
@@ -96,6 +102,48 @@ module Juicy
         end
       end
       half_steps
+    end
+    
+    def do
+      if @mode == :major
+        @root
+      end
+    end
+    
+    def re
+      if @mode == :major
+        @root + 2
+      end
+    end
+    
+    def mi
+      if @mode == :major
+        @root + 4
+      end
+    end
+    
+    def fa
+      if @mode == :major
+        @root + 5
+      end
+    end
+    
+    def so
+      if @mode == :major
+        @root + 7
+      end
+    end
+    
+    def la
+      if @mode == :major
+        @root + 9
+      end
+    end
+    
+    def ti
+      if @mode == :major
+        @root + 11
+      end
     end
     
     private

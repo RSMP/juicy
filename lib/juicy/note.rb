@@ -27,7 +27,7 @@ module Juicy
     end
 	  
     def inspect
-      "#{@name}"
+      "#{@name}#{@octave}"
     end
     
     def play(options = {duration: 200, octave: (@octave-@@default_octave)})
