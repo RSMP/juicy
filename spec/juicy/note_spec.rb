@@ -34,8 +34,47 @@ describe Note do
     it "should take a integer as an argument" do
       expect {note + 1}.not_to raise_error
     end
-    it "should return a note with a higher pitch" do
-      expect((note+1).pitch).to be > note.pitch
+    context "if the argument is positive" do
+      it "should return a higher note" do
+        expect((note+1)).to be > note
+        expect((note+2)).to be > note
+        expect((note+5)).to be > note
+        expect((note+10)).to be > note
+        expect((note+20)).to be > note
+      end
+    end
+    context "if the argument is negative" do
+      it "should return a lower note" do
+        expect((note+(-1))).to be < note
+        expect((note+(-2))).to be < note
+        expect((note+(-5))).to be < note
+        expect((note+(-10))).to be < note
+        expect((note+(-20))).to be < note
+      end
+    end
+  end
+  
+  describe "#-" do
+    it "should take a integer as an argument" do
+      expect {note - 1}.not_to raise_error
+    end
+    context "if the argument is positive" do
+      it "should return a lower note" do
+        expect((note-1)).to eq Note.new(name: "B", octave_change: 1)
+        expect((note-2)).to eq Note.new(name: "Bb", octave_change: 1)
+        expect((note-5)).to eq Note.new(name: "G")
+        expect((note-10)).to eq Note.new(name: "D")
+        expect((note-20)).to eq Note.new(name: "E", octave_change: -1)
+      end
+    end
+    context "if the argument is negative" do
+      it "should return a higher note" do
+        expect((note-(-1))).to be > note
+        expect((note-(-2))).to be > note
+        expect((note-(-5))).to be > note
+        expect((note-(-10))).to be > note
+        expect((note-(-20))).to be > note
+      end
     end
   end
 end

@@ -49,25 +49,17 @@ module Juicy
         Thread.pass
       @prepared_note = @pitch.prepare(options)
       @prepared_note[:sleep_time] = @distance_from_beat_in_milliseconds/1000.0
-      #puts @prepared_note.status
       until @prepared_note.status.eql? "sleep"
         sleep 0.001
-        #puts @prepared_note.status
       end
       @prepared_note
       self
     end
     
     def play_prepared
-      #puts @prepared_note.status
-      #puts "playing"
       until @prepared_note.status.eql? "sleep"
         sleep 0.001
-        #puts @prepared_note.status
-        #Thread.pass
       end
-      #Thread.pass
-      #puts "waking up"
       @prepared_note.wakeup
     end
     
