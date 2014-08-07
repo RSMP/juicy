@@ -25,10 +25,12 @@ module Juicy
     class Scale
     include Enumerable
     
-    attr_reader :root
+    attr_reader :root, :mode
 
-    def initialize(type = :major, root = Note.new)
-      case type
+    def initialize(options = {mode: :major, root: Note.new})
+      options[:mode] ||= :major
+      options[:root] ||= Note.new
+      case options[:mode]
       when :major
       @type = :diatonic
       when :minor
@@ -36,8 +38,8 @@ module Juicy
       else
       @type = type
       end
-      @mode = Mode.new(type)
-      @root = root
+      @mode = Mode.new(options[:mode])
+      @root = options[:root]
       generate_notes
     
     end
@@ -51,7 +53,7 @@ module Juicy
     end
     
     def play
-    
+      each_note &:play
     end
     
     def mode=(type)
