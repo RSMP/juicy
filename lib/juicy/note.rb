@@ -4,7 +4,10 @@ module Juicy
   
     include Comparable
   
-	  @@default_octave = 5
+    class << self
+      attr_reader :default_octave
+    end
+    @default_octave = 5
     attr_reader :name, :pitch, :duration, :octave, :occupying_beat
     attr_accessor :sum_of_queued_note_durations, :how_far_into_the_song_you_are
     attr_accessor :distance_from_beat_in_milliseconds
@@ -16,7 +19,7 @@ module Juicy
       @name = parse_note_name(options[:name])
       @pitch = Pitch.new(@name)
       @duration = Duration.new(options[:duration])
-	    @octave = @@default_octave + options[:octave_change]
+      @octave = Note.default_octave + options[:octave_change]
     end
     
     def to_s
@@ -25,21 +28,21 @@ module Juicy
       name += "b" if @name=~/flat/
       "#{name}#{@octave}"
     end
-	  
+  
     def inspect
       "#{@name}#{@octave}"
     end
     
-    def play(options = {duration: 200, octave: (@octave-@@default_octave)})
+    def play(options = {duration: 200, octave: (@octave-Note.default_octave)})
       if @name == :_
         options[:volume] = 0
       end
       @pitch.play(options)
     end
     
-    def prepare(options = {duration: 200, octave: (@octave-@@default_octave)})
+    def prepare(options = {duration: 200, octave: (@octave-Note.default_octave)})
       options[:duration] = options[:duration] || 200
-      options[:octave] = options[:octave] || (@octave-@@default_octave)
+      options[:octave] = options[:octave] || (@octave-Note.default_octave)
       if @name == :_
         options[:volume] = 0
       end
@@ -114,10 +117,6 @@ module Juicy
       @duration.duration_in_milliseconds(tempo)
     end
     
-    def self.default_octave
-      @@default_octave
-    end
-    
     def plays_during(beat)
       @occupying_beat = beat
     end
@@ -133,7 +132,7 @@ module Juicy
     private
     
     def octave_change
-      @octave - @@default_octave + @step/12
+      @octave - Note.default_octave + @step/12
     end
     
     def step(interval)
@@ -147,21 +146,19 @@ module Juicy
     def parse_note_name(name)
       # parses note name input
       # user should be able to say "A#" or "a#" or "a sharp" or "A_sharp" or "a_s"
-      groups = name.to_s.match(/([a-gA-G])( |_)?(.*)/)
-      #binding.pry
-      puts "name: #{name}" if groups.nil?
-      if name.to_s.match "rest"
+      groups = name.to_s.match(/(?<name>[a-gA-G])(?<space> |_)?(?<accidental>.*)/)
+      if name.to_s.match "rest" || name.to_s.match(/^_$/)
         note_name = "_"
       else
-        note_name = groups[1].upcase
-        unless groups[3].nil? || groups[3].empty?
-          note_name += case groups[3]
+        note_name = groups[:name].upcase
+        unless groups[:accidental].nil? || groups[:accidental].empty?
+          note_name += case groups[:accidental]
           when /^(s|#)/
             "_sharp"
           when /^(f|b)/
             "_flat"
           else
-            puts "Unknown note modifier: '#{groups[3]}'"
+            puts "Unknown note modifier: '#{groups[:accidental]}'"
             ""
           end
         end
