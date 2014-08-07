@@ -77,4 +77,39 @@ describe Note do
       end
     end
   end
+
+  context "when two notes are compared" do
+    context "when the first note is higher" do
+      it "should return 1" do
+        comparison = (Note.new(name: "G", octave_change: 1) <=> Note.new(name: "G"))
+        expect(comparison).to eq(1)
+      end
+    end
+    context "when the second note is higher" do
+      it "should return -1" do
+        comparison = (Note.new(name: "G") <=> Note.new(name: "G", octave_change: 1))
+        expect(comparison).to eq(-1)
+      end
+    end
+    context "when the notes are the same" do
+      it "should return 0" do
+        comparison = (Note.new(name: "G") <=> Note.new(name: "G"))
+        expect(comparison).to eq(0)
+      end
+    end
+  end
+  
+  describe "#==" do
+    it "should return true if two notes are the same" do
+      expect(Note.new).to eq Note.new
+      expect(Note.new(name: "G")).to eq Note.new(name: "G")
+      expect(Note.new(name: "G", octave_change: 1)).to eq Note.new(name: "G") + 12
+    end
+    it "should return false if two notes are different" do
+      expect(Note.new).not_to eq Note.new + 1
+      expect(Note.new(name: "G")).not_to eq Note.new(name: "A")
+      expect(Note.new(name: "G", octave_change: 1)).not_to eq Note.new(name: "A") + 12
+    end
+  end
+  
 end
