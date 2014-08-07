@@ -15,7 +15,7 @@ describe Pitch do
 
   describe "#+" do
     context "when you add 1 to a pitch" do
-      its "frequency is bigger" do
+      it "should have a larger frequency" do
         expect((default_pitch + 1).frequency).to be > default_pitch.frequency
       end
     end
