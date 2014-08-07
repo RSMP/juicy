@@ -30,20 +30,25 @@ module Juicy
   class Pitch
 
     include Comparable
-    @@temperament = :equal
-    @@pitch_standard = 440.0
+    @temperament = :equal
+    @pitch_standard = 440.0
+    
+    class << self
+      attr_reader :temperament, :pitch_standard
+    end
 
     attr_reader :frequency, :confidence
 
-    def initialize(pitch = @@pitch_standard, tune_now = true)
+    def initialize(pitch = Pitch.pitch_standard, tune_now = true)
       
       if pitch.kind_of? Numeric
         @frequency = pitch
         @tuned = false
         tune if tune_now
       else
+        raise ArgumentError unless pitch.kind_of? Symbol
         step = PITCHES[pitch.to_sym]
-        @frequency = @@pitch_standard*2**(step/12.0)
+        @frequency = Pitch.pitch_standard*2**(step/12.0)
         @tuned = true
       end
       
@@ -57,7 +62,7 @@ module Juicy
       if out_of_tune
         step = Math.log(@frequency/440.0,2)*12
         @confidence = (1.0-2*(step - step.round).abs)*100.0
-        @frequency = @@pitch_standard*2**((step.round)/12.0)
+        @frequency = Pitch.pitch_standard*2**((step.round)/12.0)
         @tuned = true
       end
       self
@@ -102,7 +107,7 @@ module Juicy
     end
 
     def change_by (interval)
-      if @@temperament.eql? :equal
+      if Pitch.temperament.eql? :equal
         Pitch.new(@frequency*2**(interval/12.0))
       end
     end

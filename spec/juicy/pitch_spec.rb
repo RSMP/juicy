@@ -3,6 +3,13 @@ include Juicy
 
 describe Pitch do
   let(:default_pitch) {Pitch.new}
+  
+  describe "to_s" do
+    it "should display the frequency" do
+      expect(default_pitch.to_s).to match(/\d+\.\d+/)
+    end
+  end
+  
   context "a new default pitch" do
     it "should have a frequency of the concert pitch" do
       concert_pitch = 440
