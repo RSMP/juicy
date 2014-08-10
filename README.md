@@ -15,7 +15,8 @@ frequency in equal temperament.
 
     require 'juicy'
     pitch = Juicy::Pitch.new(445)
-    pitch.play # audio playback only implemented for Windows platforms
+    pitch.play # audio playback only implemented for Windows and Linux platforms
+    # Linux platforms need to have ALSA audio libraries installed (which you probably do)
 
 A Note is a Pitch with a name.
 You give it a note name and an octave
