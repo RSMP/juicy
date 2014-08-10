@@ -85,7 +85,10 @@ module Juicy
       options[:duration] ||= 200
       options[:octave] ||= 0
       options[:volume] ||= 1
-      ::Sound::Out.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume])
+      device = Sound::Device.new
+      data = Sound::Data.new(device.format)
+      data.generate_sine_wave(@frequency*2**(options[:octave]), options[:duration], options[:volume])
+      device.play data
     end
 
     def prepare(options = {duration: 200, octave: 0, volume: 1})
