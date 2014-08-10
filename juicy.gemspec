@@ -2,8 +2,8 @@
 Gem::Specification.new do |spec|
 
   spec.name = 'juicy'
-  spec.version = '0.1.2'
-  spec.date = '2014-08-03'
+  spec.version = '0.1.3'
+  spec.date = '2014-08-10'
   spec.summary = 'Song writing tool'
   spec.description = 'Generates songs'
   spec.authors = ["Dominic Muller"]
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
     "lib/juicy/voice.rb",
     "bin/juicy.rb"
   ]
-  spec.add_runtime_dependency 'sound', '~> 0.0', '>= 0.0.2'
+  spec.add_runtime_dependency 'sound', '~> 0.0', '>= 0.0.6'
   spec.add_development_dependency 'rspec'
   spec.homepage = 'https://github.com/RSMP/juicy'
   spec.license = 'MIT'
