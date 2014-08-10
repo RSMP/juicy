@@ -46,7 +46,7 @@ Of course, this is cumbersome to do all on our own,
 so you have a Scale available to you.
 
     root = Juicy::Note.new(name: "D", octave_change: -1)
-    scale = Juicy::Scale.new(:major, root)
+    scale = Juicy::Scale.new(mode: :major, root: root)
     scale.each_note do |note|
       note.play
     end
