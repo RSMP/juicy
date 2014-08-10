@@ -1,4 +1,4 @@
-require_relative '../lib/juicy.rb'
+require 'juicy'
 include Juicy
 play = true
 # To make a pitch, give it a frequency.
@@ -45,7 +45,8 @@ sleep 0.3
 puts "----------"
 # Of course, this is cumbersome to do all on our own,
 # so you have a Scale available to you.
-scale = Scale.new(:major, Note.new(name: "D", octave_change: -1))
+root = Note.new(name: "D", octave_change: -1)
+scale = Scale.new(mode: :major, root: root)
 puts scale
 scale.each_note do |note|
   note.play if play
@@ -63,13 +64,13 @@ end
 # and a beat sequencer to bring it all together.
 
 sleep 0.3
-scale = Scale.new(:major, Note.new(name: "G", octave_change: -1))
+root = Note.new(name: "G", octave_change: -1)
+scale = Scale.new(mode: :major, root: root)
 puts scale
 scale.each_note do |note|
   note.play if play
 end
 
-puts
 
 # threads = []
 # 
