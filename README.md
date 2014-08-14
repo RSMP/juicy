@@ -20,7 +20,8 @@ frequency in equal temperament.
 
     require 'juicy'
     pitch = Juicy::Pitch.new(445)
-    pitch.play # audio playback only implemented for Windows platforms
+    pitch.play # audio playback only implemented for Windows and Linux platforms
+    # Linux platforms need to have ALSA audio libraries installed (which you probably do)
 
 A Note is a Pitch with a name.
 You give it a note name and an octave
@@ -50,7 +51,7 @@ Of course, this is cumbersome to do all on our own,
 so you have a Scale available to you.
 
     root = Juicy::Note.new(name: "D", octave_change: -1)
-    scale = Juicy::Scale.new(:major, root)
+    scale = Juicy::Scale.new(mode: :major, root: root)
     scale.each_note do |note|
       note.play
     end
