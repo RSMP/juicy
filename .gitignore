@@ -1,3 +1,5 @@
 doc/*
 *.gem
 .rspec
+*.json
+*.lock

@@ -1,5 +1,10 @@
 juicy
 =====
+[![Gem Version](https://badge.fury.io/rb/juicy.svg)](http://badge.fury.io/rb/juicy)
+[![Build Status](https://travis-ci.org/RSMP/juicy.svg)](https://travis-ci.org/RSMP/juicy)
+[![Coverage Status](https://coveralls.io/repos/RSMP/juicy/badge.png)](https://coveralls.io/r/RSMP/juicy)
+[![Dependency Status](https://gemnasium.com/RSMP/juicy.svg)](https://gemnasium.com/RSMP/juicy)
+[![Code Climate](https://codeclimate.com/github/RSMP/juicy/badges/gpa.svg)](https://codeclimate.com/github/RSMP/juicy)
 
 Song creation software for the Ruby developer
 
