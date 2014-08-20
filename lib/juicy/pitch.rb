@@ -39,17 +39,17 @@ module Juicy
 
     attr_reader :frequency, :confidence
 
-    def initialize(options = {pitch: Pitch.pitch_standard, tune_now: true})
-      options[:pitch] ||= Pitch.pitch_standard
+    def initialize(options = {frequency: Pitch.pitch_standard, tune_now: true})
+      options[:frequency] ||= Pitch.pitch_standard
       options[:tune_now] ||= true
       
-      if options[:pitch].kind_of? Numeric
-        @frequency = options[:pitch]
+      if options[:frequency].kind_of? Numeric
+        @frequency = options[:frequency]
         @tuned = false
         tune if options[:tune_now]
       else
-        raise ArgumentError unless options[:pitch].kind_of? Symbol
-        step = PITCHES[options[:pitch].to_sym]
+        raise ArgumentError unless options[:frequency].kind_of? Symbol
+        step = PITCHES[options[:frequency].to_sym]
         @frequency = Pitch.pitch_standard*2**(step/12.0)
         @tuned = true
       end
@@ -111,7 +111,7 @@ module Juicy
 
     def change_by (interval)
       if Pitch.temperament.eql? :equal
-        Pitch.new(pitch: @frequency*2**(interval/12.0))
+        Pitch.new(frequency: @frequency*2**(interval/12.0))
       end
     end
 

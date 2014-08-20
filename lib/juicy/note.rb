@@ -17,7 +17,7 @@ module Juicy
       options[:duration] ||= :quarter
       options[:octave_change] ||= 0
       @name = parse_note_name(options[:name])
-      @pitch = Pitch.new(pitch: @name)
+      @pitch = Pitch.new(frequency: @name)
       @duration = Duration.new(options[:duration])
       @octave = Note.default_octave + options[:octave_change]
     end
