@@ -49,19 +49,19 @@ describe Pitch do
   context "when two pitches are compared" do
     context "when the frequency of the first pitch is higher" do
       it "should return 1" do
-        comparison = (Pitch.new(400) <=> Pitch.new(200))
+        comparison = (Pitch.new(pitch: 400) <=> Pitch.new(pitch: 200))
         expect(comparison).to eq(1)
       end
     end
     context "when the frequency of the second pitch is higher" do
       it "should return -1" do
-        comparison = (Pitch.new(200) <=> Pitch.new(400))
+        comparison = (Pitch.new(pitch: 200) <=> Pitch.new(pitch: 400))
         expect(comparison).to eq(-1)
       end
     end
     context "when the frequencies are the same" do
       it "should return 0" do
-        comparison = (Pitch.new(400) <=> Pitch.new(400))
+        comparison = (Pitch.new(pitch: 400) <=> Pitch.new(pitch: 400))
         expect(comparison).to eq(0)
       end
     end
