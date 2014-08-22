@@ -7,8 +7,9 @@ module Juicy
   
     attr_reader :rotate, :type
   
-    def initialize(type = :ionian)
-      @type = type
+    def initialize(options = {type: :ionian})
+      options[:type] ||= :ionian
+      @type = options[:type]
       @rotate = case @type
       when :major
       0

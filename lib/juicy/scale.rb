@@ -38,7 +38,7 @@ module Juicy
       else
       @type = type
       end
-      @mode = Mode.new(options[:mode])
+      @mode = Mode.new(type: options[:mode])
       @root = options[:root]
       generate_notes
     
