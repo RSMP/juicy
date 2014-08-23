@@ -22,4 +22,14 @@ describe Juicy::Mode do
       end
     end
   end
+  describe "#to_s" do
+    it "returns its type" do
+      mode = Mode.new(type: :minor)
+      expect(mode.to_s).to eq "minor"
+    end
+    it "returns a String" do
+      mode = Mode.new(type: :major)
+      expect(mode.to_s.class).to eq String
+    end
+  end
 end
