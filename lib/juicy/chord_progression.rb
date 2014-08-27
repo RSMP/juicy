@@ -1,27 +1,26 @@
 module Juicy
-  
+
   class ChordProgression
-  
+
     attr_accessor :chords
-    
-    def initialize(key, mode, numerals = [1,4,1,5])
-    
-      @numerals = numerals
-      
+
+    def initialize(options = {key: Key.new, mode: Mode.new, numerals: [1,4,1,5]})
+
+      @key = options[:key] || Key.new
+      @numerals = options[:numerals] || []
+      @mode = options[:mode] || Mode.new
+
       #given a key and a mode, a number can tell me what chord.
-      
+
       @chords = [
-        Chord.new(root: "A", quality: :major),
-        Chord.new(root: "D", quality: :major),
-        Chord.new(root: "A", quality: :major),
-        Chord.new(root: "E", quality: :major)
+        Chord.new(root: "A", quality: @mode),
+        Chord.new(root: "D", quality: @mode),
+        Chord.new(root: "A", quality: @mode),
+        Chord.new(root: "E", quality: @mode)
       ]
-     #@numerals.each do |numeral|
-     #  @chords << Chord.new(numeral)
-     #end
-      
+
     end
-    
+
     def inspect
       output = ""
       @chords.each do |chord|
@@ -29,7 +28,7 @@ module Juicy
       end
       output[0..-3]
     end
-  
+
     def to_s
       output = ""
       @progression.each do |scale_degree|
@@ -37,22 +36,22 @@ module Juicy
       end
       output[0..-3]
     end
-    
+
     def to_a
       [Chord.new(root: "C")]
       @chords
     end
-    
+
     def initial_play_time
       0
     end
-    
+
     def play
       @chords.each do |chord|
         4.times {chord.play}
       end
     end
-    
+
   end
-  
+
 end

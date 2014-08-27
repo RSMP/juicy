@@ -10,9 +10,9 @@ module Juicy
       attr_accessor :last_beat, :current_beat, :prepared_beats, :out_of_notes_to_prepare
     end
 
-    def initialize(init_time, notes, tempo)
+    def initialize(init_time = 0, notes, tempo)
 
-      @start_time = init_time
+      @start_time = init_time || 0
       @notes = notes.to_a
       @tempo = tempo
 
@@ -109,7 +109,7 @@ module Juicy
     end
 
     def occupying_beat
-      @track_length_in_milliseconds.round / Duration.duration_of_quarter_note_in_milliseconds(@tempo).round + 1
+      (@track_length_in_milliseconds+@start_time).round / Duration.duration_of_quarter_note_in_milliseconds(@tempo).round + 1
     end
 
     # find the final beat of all tracks combined
