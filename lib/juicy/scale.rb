@@ -25,7 +25,7 @@ module Juicy
   class Scale
     include Enumerable
 
-    attr_reader :root, :mode
+    attr_reader :root, :mode, :notes
 
     def initialize(options = {mode: Mode.new, root: Note.new})
       options[:mode] ||= :major
@@ -146,6 +146,17 @@ module Juicy
       if @mode == :major
         @root + 11
       end
+    end
+
+    def notes
+      return @raw_notes if @raw_notes
+      @raw_notes = []
+      @raw_notes << @root
+      SCALE_TYPES[@type].rotate(@mode.rotate).each do |step|
+        binding.pry unless @raw_notes[-1]
+        @raw_notes << @raw_notes[-1] + step
+      end
+      @raw_notes
     end
 
     private

@@ -85,7 +85,7 @@ module Juicy
     end
 
     def self.wait_until_beat_buffer_is_a_little_full
-      until (Track.prepared_beats.size >= 4) || Track.out_of_notes_to_prepare
+      until (Track.prepared_beats.size >= 8) || Track.out_of_notes_to_prepare
         sleep 0.01
       end
     end

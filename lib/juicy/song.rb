@@ -11,8 +11,8 @@ module Juicy
       @voices = []
       @voices << Voice.new
       @key = :A
-      @mode = :minor
-      @tempo = 100.0
+      @mode = :major
+      @tempo = 90.0
       @time_signature = [4,4]
       @measures = []
       4.times {@measures << Measure.new(@time_signature)}
@@ -29,7 +29,7 @@ module Juicy
       @tracks << Track.new(0, demo_melody, @tempo)
       number_of_tracks = 1
       number_of_tracks.times do |num|
-        melody = Melody.new(chord_progression: chord_progression, song: self, strategy: :half_notes_root_first_3rd_second)
+        melody = Melody.new(chord_progression: chord_progression, song: self, strategy: :strat_1)
         @tracks << Track.new(melody.initial_play_time, melody, @tempo)
       end
 
@@ -49,37 +49,54 @@ module Juicy
       @demo_melody ||= [
         Note.new(name: "A", duration: :eighth, octave_change: -1),
         Note.new(name: "E", duration: :eighth, octave_change: -1),
-        Note.new(name: "C", duration: :eighth, octave_change: -1),
+        Note.new(name: "C#", duration: :eighth, octave_change: -1),
         Note.new(name: "E", duration: :eighth, octave_change: -1),
         Note.new(name: "A", duration: :eighth, octave_change: 0),
         Note.new(name: "E", duration: :eighth, octave_change: -1),
-        Note.new(name: "C", duration: :eighth, octave_change: -1),
+        Note.new(name: "C#", duration: :eighth, octave_change: -1),
         Note.new(name: "E", duration: :eighth, octave_change: -1),
-        Note.new(name: "A", duration: :eighth, octave_change: -1),
-        Note.new(name: "E", duration: :eighth, octave_change: -1),
-        Note.new(name: "C", duration: :eighth, octave_change: -1),
-        Note.new(name: "E", duration: :eighth, octave_change: -1),
-        Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "E", duration: :eighth, octave_change: -1),
-        Note.new(name: "C", duration: :eighth, octave_change: -1),
-        Note.new(name: "E", duration: :eighth, octave_change: -1),
+        #Note.new(name: "A", duration: :eighth, octave_change: -1),
+        #Note.new(name: "E", duration: :eighth, octave_change: -1),
+        #Note.new(name: "C#", duration: :eighth, octave_change: -1),
+        #Note.new(name: "E", duration: :eighth, octave_change: -1),
+        #Note.new(name: "A", duration: :eighth, octave_change: 0),
+        #Note.new(name: "E", duration: :eighth, octave_change: -1),
+        #Note.new(name: "C#", duration: :eighth, octave_change: -1),
+        #Note.new(name: "E", duration: :eighth, octave_change: -1),
 
         Note.new(name: "D", duration: :eighth, octave_change: -1),
         Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "F", duration: :eighth, octave_change: -1),
+        Note.new(name: "F#", duration: :eighth, octave_change: -1),
         Note.new(name: "A", duration: :eighth, octave_change: 0),
         Note.new(name: "D", duration: :eighth, octave_change: 0),
         Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "F", duration: :eighth, octave_change: -1),
+        Note.new(name: "F#", duration: :eighth, octave_change: -1),
         Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "D", duration: :eighth, octave_change: -1),
+        #Note.new(name: "D", duration: :eighth, octave_change: -1),
+        #Note.new(name: "A", duration: :eighth, octave_change: 0),
+        #Note.new(name: "F#", duration: :eighth, octave_change: -1),
+        #Note.new(name: "A", duration: :eighth, octave_change: 0),
+        #Note.new(name: "D", duration: :eighth, octave_change: 0),
+        #Note.new(name: "A", duration: :eighth, octave_change: 0),
+        #Note.new(name: "F#", duration: :eighth, octave_change: -1),
+        #Note.new(name: "A", duration: :eighth, octave_change: 0)
+
+        Note.new(name: "A", duration: :eighth, octave_change: -1),
+        Note.new(name: "E", duration: :eighth, octave_change: -1),
+        Note.new(name: "C#", duration: :eighth, octave_change: -1),
+        Note.new(name: "E", duration: :eighth, octave_change: -1),
         Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "F", duration: :eighth, octave_change: -1),
-        Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "D", duration: :eighth, octave_change: 0),
-        Note.new(name: "A", duration: :eighth, octave_change: 0),
-        Note.new(name: "F", duration: :eighth, octave_change: -1),
-        Note.new(name: "A", duration: :eighth, octave_change: 0)
+        Note.new(name: "E", duration: :eighth, octave_change: -1),
+        Note.new(name: "C#", duration: :eighth, octave_change: -1),
+        Note.new(name: "E", duration: :eighth, octave_change: -1),
+        Note.new(name: "E", duration: :eighth, octave_change: -1),
+        Note.new(name: "B", duration: :eighth, octave_change: 0),
+        Note.new(name: "G#", duration: :eighth, octave_change: -1),
+        Note.new(name: "B", duration: :eighth, octave_change: 0),
+        Note.new(name: "E", duration: :eighth, octave_change: 0),
+        Note.new(name: "B", duration: :eighth, octave_change: 0),
+        Note.new(name: "G#", duration: :eighth, octave_change: -1),
+        Note.new(name: "B", duration: :eighth, octave_change: 0)
       ]
     end
 

@@ -161,6 +161,18 @@ module Juicy
       (self.octave <=> other_note.octave) == 0
     end
 
+    def self.distance_between_notes(note, other_note)
+      direction = note <=> other_note
+      distance = 0
+      until (note <=> other_note) == 0
+        #puts distance
+        other_note += direction
+        distance += 1
+      end
+      #puts
+      distance
+    end
+
   end
 
 end
