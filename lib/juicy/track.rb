@@ -6,6 +6,7 @@ module Juicy
     attr_accessor :notes
 
     class << self
+      # consider extracting these to a PlaySession class or something
       attr_accessor :last_beat, :current_beat, :prepared_beats, :out_of_notes_to_prepare
     end
 
@@ -111,49 +112,49 @@ module Juicy
       @track_length_in_milliseconds.round / Duration.duration_of_quarter_note_in_milliseconds(@tempo).round + 1
     end
 
+    # find the final beat of all tracks combined
+    # until you've prepared all the notes, prepare each note in an array with
+    # other notes who occupy the same beat
+    # only add/prepare beats if there are fewer than 20 prepared already
+    # so that we don't hit the thread limit.  This assumes that a buffer of 20
+    # is sufficent and that each beat has, on average, fewer than 30 notes.
+    # if there are too many notes, weird things start to happen, so don't do that.
+    # Pass thread execution over to note playing so that there is no delay in playback
+    #  If it's not passed, notes won't get played in time since the until loop is looping
+    #  over an empty array
+    #
     def self.prepare_beats_thread(tracks, tempo)
       Thread.new do
         Thread.current[:name] = "prepare beats thread"
         Track.current_beat = 1
-        # find the final beat of all tracks combined
         Track.last_beat = Track.final_beat_in(tracks)
-        # until you've prepared all the notes, prepare each note in an array with
-        # other notes who occupy the same beat
         until Track.all_beats_prepared
-          # only add/prepare beats if there are fewer than 20 prepared already
-          # so that we don't hit the thread limit.  This assumes that a buffer of 20
-          # is sufficent and that each beat has, on average, fewer than 30 notes.
-          # if there are too many notes, weird things start to happen, so don't do that.
           if Track.room_in_prepared_beats_buffer
             Track.prepare_next_beat_given(tracks, tempo)
           end
-          # Pass thread execution over to note playing so that there is no delay in playback
           Thread.pass
         end
         Track.out_of_notes_to_prepare = true
       end
     end
 
+    # when prepared_beats has at least a few beats to play (a measure's worth?)
+    # "start" the song by iterating through each element, waking up each note
+    # and then waiting the remainder of a beat's worth of milliseconds until the
+    # next beat
+    #
     def self.play_prepared_beats_thread(tempo)
       Thread.new do
         Thread.current[:name] = "play prepared beats thread"
-        # when prepared_beats has at least a few beats to play (a measure's worth?)
-        # "start" the song by iterating through each element, waking up each note
-        # and then waiting the remainder of a beat's worth of milliseconds until the
-        # next beat
         Track.wait_until_beat_buffer_is_a_little_full
         last_note = Thread.new {}
         time = Time.now
         until Track.no_more_to_play
           time = Time.now
-          # take the next beat's worth of notes
           beat = Track.prepared_beats.shift
-          # start each note in the beat as its own thread
           beat.each do |note|
             last_note = note.play_prepared
           end
-          # to ensure simultaneity, sleep for however much longer a beat lasts
-          # at the current tempo
           sleep_amount = Duration.duration_of_quarter_note_in_milliseconds(tempo)/1000.0 - (Time.now - time)
           sleep sleep_amount unless sleep_amount < 0
         end
