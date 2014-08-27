@@ -5,7 +5,7 @@ play = true
 # By default, the frequency will be tuned to the nearest
 # frequency in equal temperament.
 #
-pitch = Pitch.new(445)
+pitch = Pitch.new(frequency: 445)
 puts pitch
 pitch.play if play
 

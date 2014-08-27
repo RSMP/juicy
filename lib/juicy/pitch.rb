@@ -26,13 +26,13 @@ module Juicy
   }
 
   # This class encapsulates all of the pitch mechanics for a given temperament.
-  # 
+  #
   class Pitch
 
     include Comparable
     @temperament = :equal
     @pitch_standard = 440.0
-    
+
     class << self
       attr_reader :temperament, :pitch_standard
     end
@@ -42,7 +42,7 @@ module Juicy
     def initialize(options = {frequency: Pitch.pitch_standard, tune_now: true})
       options[:frequency] ||= Pitch.pitch_standard
       options[:tune_now] ||= true
-      
+
       if options[:frequency].kind_of? Numeric
         @frequency = options[:frequency]
         @tuned = false
@@ -53,7 +53,7 @@ module Juicy
         @frequency = Pitch.pitch_standard*2**(step/12.0)
         @tuned = true
       end
-      
+
     end
 
     def to_s
@@ -71,15 +71,14 @@ module Juicy
     end
 
     def +(interval)
-      change_by (interval)
+      change_by(interval)
     end
 
     def -(interval)
-      change_by (-interval)
+      change_by(-interval)
     end
 
     def self.play(options = {duration: 200})
-      binding.pry
       Sound::Out.play_freq(options[:note].pitch.frequency, options[:note].duration)
     end
 
@@ -95,8 +94,9 @@ module Juicy
       options[:duration] ||= 200
       options[:octave] ||= 0
       options[:volume] ||= 1
-      
-      return Thread.new{Win32::Sound.play_freq(@frequency*2**(options[:octave]), options[:duration], options[:volume], true)}
+      beep = Sound::Data.new.sine_wave(@frequency*2**(options[:octave]), options[:duration], options[:volume])
+
+      return Thread.new{Sound::Device.new {|d| d.write beep; Thread.stop; sleep Thread.current[:sleep_time]}}
     end
 
     def <=>(other_pitch)

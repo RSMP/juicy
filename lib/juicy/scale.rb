@@ -22,12 +22,12 @@ module Juicy
   # octotonic  |-  - |- |-  - |- |-  - |- |-  - |- |
   #
 
-    class Scale
+  class Scale
     include Enumerable
     
     attr_reader :root, :mode
 
-    def initialize(options = {mode: :major, root: Note.new})
+    def initialize(options = {mode: Mode.new, root: Note.new})
       options[:mode] ||= :major
       options[:root] ||= Note.new
       case options[:mode]
@@ -53,7 +53,7 @@ module Juicy
     end
     
     def play
-      each_note &:play
+      each_note(&:play)
     end
     
     def mode=(type)
@@ -154,7 +154,8 @@ module Juicy
       @notes = []
       @notes << @root
       SCALE_TYPES[@type].rotate(@mode.rotate).each do |step|
-        @notes << @notes[-1]+step
+        binding.pry unless @notes[-1]
+        @notes << @notes[-1] + step
       end
       @notes = @notes.cycle
     end
