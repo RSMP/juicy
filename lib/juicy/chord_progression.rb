@@ -13,10 +13,14 @@ module Juicy
       #given a key and a mode, a number can tell me what chord.
 
       @chords = [
-        Chord.new(root: "A", quality: @mode),
-        Chord.new(root: "D", quality: @mode),
-        Chord.new(root: "A", quality: @mode),
-        Chord.new(root: "E", quality: @mode)
+        Chord.new(root: "A", quality: @mode.type),
+        Chord.new(root: "D", quality: @mode.type),
+        Chord.new(root: "A", quality: @mode.type),
+        Chord.new(root: "E", quality: @mode.type),
+        Chord.new(root: "A", quality: @mode.type),
+        Chord.new(root: "F", quality: :major),
+        Chord.new(root: "A", quality: @mode.type),
+        Chord.new(root: "E", quality: @mode.type)
       ]
 
     end
