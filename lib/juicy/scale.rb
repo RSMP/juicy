@@ -28,17 +28,17 @@ module Juicy
     attr_reader :root, :mode, :notes
 
     def initialize(options = {mode: Mode.new, root: Note.new})
-      options[:mode] ||= :major
+      options[:mode] ||= Mode.new
       options[:root] ||= Note.new
-      case options[:mode]
+      case options[:mode].type
       when :major
       @type = :diatonic
       when :minor
       @type = :diatonic
       else
-      @type = type
+      @type = options[:mode].type
       end
-      @mode = Mode.new(type: options[:mode])
+      @mode = options[:mode]
       @root = options[:root]
       generate_notes
 
@@ -86,9 +86,13 @@ module Juicy
       end
     end
 
-    def interval_between(note1, note2)
+    def interval_between(note, other_note)
       half_steps = 0
       direction = (note1 <=> note2)
+      distance = 0
+      until (note <=> other_note) == 0
+
+      end
       if direction == 0
       elsif direction == -1
         note = note1.dup
@@ -153,10 +157,20 @@ module Juicy
       @raw_notes = []
       @raw_notes << @root
       SCALE_TYPES[@type].rotate(@mode.rotate).each do |step|
-        binding.pry unless @raw_notes[-1]
         @raw_notes << @raw_notes[-1] + step
       end
       @raw_notes
+    end
+
+    def include?(other_note)
+      includes = false
+      notes.each do |note|
+        if note.name == other_note.name
+          includes = true
+          break
+        end
+      end
+      includes
     end
 
     private
@@ -165,7 +179,6 @@ module Juicy
       @notes = []
       @notes << @root
       SCALE_TYPES[@type].rotate(@mode.rotate).each do |step|
-        binding.pry unless @notes[-1]
         @notes << @notes[-1] + step
       end
       @notes = @notes.cycle

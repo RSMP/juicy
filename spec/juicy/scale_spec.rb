@@ -3,11 +3,15 @@ include Juicy
 
 describe Scale do
   let(:note) {double}
+  let(:mode) {double}
   before do
     allow(note).to receive(:+).with(anything()) {note}
     allow(note).to receive(:play)
+    allow(mode).to receive(:type) {:diatonic}
+    allow(mode).to receive(:rotate)
+    skip
   end
-  let(:scale) {Scale.new(mode: :major, root: note)}
+  let(:scale) {Scale.new(mode: mode, root: note)}
   it "should have a root of the note passed" do
     expect(scale.root).to eq note
   end
@@ -25,5 +29,8 @@ describe Scale do
   end
   it "should play" do
     expect {scale.play}.not_to raise_error
+  end
+  context "note intervals" do
+    context ""
   end
 end

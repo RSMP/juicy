@@ -33,6 +33,14 @@ module Juicy
       "#{@name}#{@octave}"
     end
 
+    def eql?(other_note)
+      note_eq_class == other_note.note_eq_class
+    end
+
+    def note_eq_class
+      (12.0*Math.log(@pitch.frequency/27.5)/Math.log(2)).round%12
+    end
+
     def play(options = {duration: 200, octave: (@octave-Note.default_octave)})
       if @name == :_
         options[:volume] = 0
@@ -165,11 +173,9 @@ module Juicy
       direction = note <=> other_note
       distance = 0
       until (note <=> other_note) == 0
-        #puts distance
         other_note += direction
         distance += 1
       end
-      #puts
       distance
     end
 

@@ -9,7 +9,7 @@ describe Note do
   it "should have a pitch of ~523.25" do
     expect(note.pitch.frequency.round 2).to eq 523.25
   end
-  
+
   it "should parse the name" do
     expect(Note.new(name: "G sharp").name).to eq :G_sharp
     expect(Note.new(name: "G s").name).to eq :G_sharp
@@ -19,7 +19,7 @@ describe Note do
     expect(Note.new(name: "G #").name).to eq :G_sharp
     expect(Note.new(name: "G#").name).to eq :G_sharp
     expect(Note.new(name: "G_#").name).to eq :G_sharp
-    
+
     expect(Note.new(name: "G flat").name).to eq :G_flat
     expect(Note.new(name: "G f").name).to eq :G_flat
     expect(Note.new(name: "G_flat").name).to eq :G_flat
@@ -29,7 +29,7 @@ describe Note do
     expect(Note.new(name: "Gb").name).to eq :G_flat
     expect(Note.new(name: "G_b").name).to eq :G_flat
   end
-  
+
   describe "#+" do
     it "should take a integer as an argument" do
       expect {note + 1}.not_to raise_error
@@ -53,7 +53,7 @@ describe Note do
       end
     end
   end
-  
+
   describe "#-" do
     it "should take a integer as an argument" do
       expect {note - 1}.not_to raise_error
@@ -98,7 +98,7 @@ describe Note do
       end
     end
   end
-  
+
   describe "#==" do
     it "should return true if two notes are the same" do
       expect(Note.new).to eq Note.new
@@ -111,5 +111,14 @@ describe Note do
       expect(Note.new(name: "G", octave_change: 1)).not_to eq Note.new(name: "A") + 12
     end
   end
-  
+
+  describe "#eql?" do
+    it "should return true if two notes belong to the same equivalence class" do
+      expect(Note.new(name: "A").eql? Note.new(name: "A", octave_change: 3)).to eq true
+    end
+    it "should return false if two notes belong to different equivalence classes" do
+      expect(Note.new(name: "A").eql? Note.new(name: "G")).to eq false
+    end
+  end
+
 end

@@ -70,6 +70,7 @@ module Juicy
       this_beats_notes = []
       tracks.each do |track|
         while !track.notes[0].nil? && track.notes[0].plays_during?(Track.current_beat)
+          Thread.pass
           playable_thing = track.notes.shift
           if playable_thing.kind_of?(Note)
             this_beats_notes << playable_thing.prepare(duration: playable_thing.duration_in_milliseconds(tempo))
@@ -85,7 +86,7 @@ module Juicy
     end
 
     def self.wait_until_beat_buffer_is_a_little_full
-      until (Track.prepared_beats.size >= 8) || Track.out_of_notes_to_prepare
+      until (Track.prepared_beats.size >= 4) || Track.out_of_notes_to_prepare
         sleep 0.01
       end
     end
@@ -143,15 +144,19 @@ module Juicy
     # and then waiting the remainder of a beat's worth of milliseconds until the
     # next beat
     #
+    # note to self (delete later): have this thread inform the other thread that there is room in the buffer
     def self.play_prepared_beats_thread(tempo)
       Thread.new do
         Thread.current[:name] = "play prepared beats thread"
         Track.wait_until_beat_buffer_is_a_little_full
         last_note = Thread.new {}
         time = Time.now
+        $time_to_play = Time.now - $time_to_play
+        puts $time_to_play
         until Track.no_more_to_play
           time = Time.now
           beat = Track.prepared_beats.shift
+          # need to lock thread scheduler to this thread in the middle of playing prepared notes.
           beat.each do |note|
             last_note = note.play_prepared
           end
