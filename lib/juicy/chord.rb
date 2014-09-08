@@ -1,16 +1,16 @@
 module Juicy
 
-  # a chord is an array of notes (played "simultaneously")
-  # three ways for a chord to go "up":
+  # a chord is a set of notes (played "simultaneously")
+  # four ways for a chord to "increase":
   #  every note in the chord goes up some number of half steps (transposition)
   #  every note in the chord goes up some number of scale steps (progression)
-  #   this only applies if a scale is involved
   #  the current bottom note goes up an octave (inversion)
   #  a note is added to the top (adding)
   # a chord has a root which is the first note in the uninverted
   # a chord's quality is a result of what notes are in it.
   # a note in a chord can remain unexpressed (say. G dominant 7 where the D isn't played)
-  #
+  # chords cannot be played
+  # a bunch of notes which derive from a chord can be played.
   class Chord
 
     QUALITIES = {
