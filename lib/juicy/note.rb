@@ -174,7 +174,7 @@ module Juicy
       distance = 0
       until (note <=> other_note) == 0
         other_note += direction
-        distance += 1
+        distance -= 1*direction
       end
       distance
     end

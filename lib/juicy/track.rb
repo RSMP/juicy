@@ -151,8 +151,8 @@ module Juicy
         Track.wait_until_beat_buffer_is_a_little_full
         last_note = Thread.new {}
         time = Time.now
-        $time_to_play = Time.now - $time_to_play
-        puts $time_to_play
+        #$time_to_play = Time.now - $time_to_play
+        #puts $time_to_play
         until Track.no_more_to_play
           time = Time.now
           beat = Track.prepared_beats.shift

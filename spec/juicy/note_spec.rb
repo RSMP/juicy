@@ -121,4 +121,11 @@ describe Note do
     end
   end
 
+  describe "::distance_between_notes" do
+    it "should be negative if second note is lower than first note" do
+      distance = Note.distance_between_notes(Note.new(name: "C", octave_change: 0), Note.new(name: "C", octave_change: -1))
+      expect(distance).to be < 0
+    end
+  end
+
 end

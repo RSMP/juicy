@@ -57,8 +57,8 @@ module Juicy
 
     def half_notes_root_first_3rd_second
       @song.measures.each_with_index do |measure, index|
-        @notes << Note.new(name: @chord_progression.chords[index].notes[0..1].sample(random: $my_seed).name, duration: :half)
-        @notes << Note.new(name: @chord_progression.chords[index].notes[1..2].sample(random: $my_seed).name, duration: :half)
+        @notes << Note.new(name: @chord_progression.chords[index].notes[0..1].sample.name, duration: :half)
+        @notes << Note.new(name: @chord_progression.chords[index].notes[1..2].sample.name, duration: :half)
       end
     end
 
@@ -77,24 +77,24 @@ module Juicy
 
     def strat_1
       # Fill first note with chord tone within octave of previous note.
-      first_part
+      one_chord_tone_per_chord
       # fill third note within measure melodically in between two notes surrounding
-      second_part
+      #cut_each_note_in_half_and_replace_second_half_with_scale_tone_between_notes
       # recursively add notes which result in either (single steps to successors) or are sixteenth notes which minimize distance
       # goal is minimal scale stepping between notes
       third_part
     end
 
-    def first_part
+    def one_chord_tone_per_chord
       @song.measures.each_with_index do |measure, index|
-        note = @chord_progression.chords[index].notes.sample(random: $my_seed)
-        @notes << Note.new(name: note.name, duration: :whole, octave_change: [*0..1].sample(random: $my_seed))
+        note = @chord_progression.chords[index].notes.sample
+        @notes << Note.new(name: note.name, duration: :whole, octave_change: [*0..2].sample)
       end
     end
 
-    def second_part
+    def cut_each_note_in_half_and_replace_second_half_with_scale_tone_between_notes
       @notes.map! do |note|
-        new_note = @scale.notes.sample(random: $my_seed)
+        new_note = @scale.notes.sample
         note = [Note.new(name: note.name, duration: :half, octave_change: note.octave - Note.default_octave), Note.new(name: new_note.name, duration: :half, octave_change: note.octave - Note.default_octave)]
       end.flatten!
     end
@@ -110,7 +110,7 @@ module Juicy
           result = 0
           #puts note if !note.kind_of? Note
           #  BUG Should be checking for distance in the scale, not distance in half steps
-          if Note.distance_between_notes(note, successor) <= 1
+          if Note.distance_between_notes(note, successor).abs <= 1
             result = note
           else
             steps_small_enough = false
@@ -138,13 +138,14 @@ module Juicy
     end
 
     def choose_new_note(note, distance)
+      puts distance
       new_note = note + distance/2
       loop_tries = 10
       until @scale.include? new_note
         break if loop_tries <= 0
         proto_new_up = new_note + 1
         proto_new_down = new_note - 1
-        if ($my_seed).rand < 0.5
+        if rand < 0.5
           if @scale.include? proto_new_up
             new_note = proto_new_up
           else

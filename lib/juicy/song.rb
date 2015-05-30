@@ -28,7 +28,7 @@ module Juicy
 
       bassline = Melody.new(chord_progression: chord_progression, song: self, strategy: :arp)
       @tracks << Track.new(bassline.initial_play_time, bassline, @tempo)
-      number_of_tracks = 2
+      number_of_tracks = 1
       number_of_tracks.times do |num|
         melody = Melody.new(chord_progression: chord_progression, song: self, strategy: :strat_1)
         @tracks << Track.new(melody.initial_play_time, melody, @tempo)
